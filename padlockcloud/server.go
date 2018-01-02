@@ -83,6 +83,8 @@ type ServerConfig struct {
 	AssetsPath string `yaml:"assets_path"`
 	// Port to listen on
 	Port int `yaml:"port"`
+	// Addr to listen on
+	Addr string `yaml:"addr"`
 	// Path to TLS certificate
 	TLSCert string `yaml:"tls_cert"`
 	// Path to TLS key file
@@ -520,18 +522,19 @@ func (server *Server) Start() error {
 	server.InitHandler()
 
 	port := server.Config.Port
+	addr := server.Config.Addr
 	tlsCert := server.Config.TLSCert
 	tlsKey := server.Config.TLSKey
 
-	server.Addr = fmt.Sprintf(":%d", port)
+	server.Addr = fmt.Sprintf("%s:%d", addr, port)
 
 	// Start server
 	if tlsCert != "" && tlsKey != "" {
-		server.Info.Printf("Starting server with TLS on port %v", port)
+		server.Info.Printf("Starting server with TLS on %s:%v", addr, port)
 		server.Secure = true
 		return server.ListenAndServeTLS(tlsCert, tlsKey)
 	} else {
-		server.Info.Printf("Starting server on port %v", port)
+		server.Info.Printf("Starting server on %s:%v", addr, port)
 		return server.ListenAndServe()
 	}
 }
