@@ -293,6 +293,13 @@ func NewCliApp() *CliApp {
 					Destination: &config.Server.Port,
 				},
 				cli.StringFlag{
+					Name:        "addr, a",
+					Usage:       "Interface to listen on",
+					Value:       "",
+					EnvVar:      "PC_ADDR",
+					Destination: &config.Server.Addr,
+				},
+				cli.StringFlag{
 					Name:        "assets-path",
 					Usage:       "Path to assets directory",
 					Value:       DefaultAssetsPath,
